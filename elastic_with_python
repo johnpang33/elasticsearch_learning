@@ -1,0 +1,72 @@
+python -m pip install elasticsearch
+
+Why use the python client?
+Get a lot of the work done for you. 
+- Connection pooling to spread requests evenly
+- Securing the data 
+- Authentication all handled for you (API keys, username/password)
+
+Able to use python types
+
+How does the client work?
+
+import asyncio
+from elasticsearch import AsyncElasticsearch
+
+____________________________________________________________
+Get data into ElasticSearch using python
+
+connection.py
+______________________________________-
+import os
+from elasticsearch import ElasticSearch
+index = "INDEX_NAME"
+
+client = ElasticSearch(
+	hosts = ['HOSTNAME']
+	http_auth = (
+		os.environ.get('ES_USER),
+		os.environ.get('ES_PASSWORD),
+	)
+)
+
+print(client)
+
+
+****************************************************
+from connection import client, index
+from datetime import datetime
+doc = {
+	"cat": "ollie",
+	"action": "good",
+	"comment": "sleeps at the foot of the bed",
+	"date": "datatime.now()
+}
+
+client.index(index, body = doc)
+
+******************************************************
+bulk
+from connection import index, client
+from elasticsearch.helpers import bulk
+import eland as ed
+import pandas as pd
+
+
+def main():
+	df = pd.read_csv(
+		'cat.data.csv', 
+		parse_dates=['date'],
+	)
+	df.set_index('_id', inplace=True)
+
+	ed.pandas_to_eland(
+		df,
+		es_client=client,
+		es_dest_index=index,
+		es_if_exists="replace",
+	)
+	
+if __name__ == "__main__":
+	main
+
